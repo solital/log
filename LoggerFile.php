@@ -13,17 +13,17 @@ class LoggerFile implements LoggerInterface
      * 
      * @var string
      */
-    private string $log_file;
+    #private string $log_file;
 
     /**
      * @var string
      */
-    #private string $log_file_name;
+    private string $log_file_name;
 
     /**
      * @var string
      */
-    #private string $log_dir_name;
+    private string $log_dir_name;
 
     /**
      * Log channel--namespace for log lines.
@@ -81,11 +81,13 @@ class LoggerFile implements LoggerInterface
      */
     public function __construct(string $channel, string $log_file, string $log_level = LogLevel::DEBUG)
     {
-        $this->log_file  = Application::getRootApp("Storage/log/" . date('Y-m-d.H-i-s') . "-" . $log_file . ".txt", Application::DEBUG);
-        /* $this->log_file_name = date('Y-m-d.H-i-s') . "-" . $log_file . ".txt";
-        $this->log_dir_name = Application::getRootApp("Storage/log/", Application::DEBUG); */
+        #$this->log_file  = Application::getRootApp("Storage/log/" . date('Y-m-d.H-i-s') . "-" . $log_file . ".txt", Application::DEBUG);
+        $this->log_file_name = $channel . "-" . $log_file . "-" . date('Y-m-d.H-i-s') . ".txt";
+        $this->log_dir_name = Application::getRootApp("Storage/log/", Application::DEBUG);
+
         $this->channel   = $channel;
         $this->stdout    = false;
+        
         $this->setLogLevel($log_level);
     }
 
@@ -285,12 +287,13 @@ class LoggerFile implements LoggerInterface
 
         // Log to file
         try {
-            file_put_contents($this->log_file, $log_line);
+            file_put_contents($this->log_dir_name . $this->log_file_name, $log_line);
+            #file_put_contents($this->log_file, $log_line);
             /* $fh = fopen($this->log_file, 'a');
             fwrite($fh, $log_line);
             fclose($fh); */
         } catch (\Throwable $e) {
-            throw new RuntimeException("Could not open log file {$this->log_file} for writing to SimpleLog channel {$this->channel}!", 0, $e);
+            throw new RuntimeException("Could not open log file {$this->log_file_name} for writing to SimpleLog channel {$this->channel}!", 0, $e);
         }
 
         // Log to stdout if option set to do so.
