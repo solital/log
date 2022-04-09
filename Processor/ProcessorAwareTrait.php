@@ -1,19 +1,10 @@
 <?php
 
-/**
- * Phoole (PHP7.2+)
- *
- * @category  Library
- * @package   Solital\Core\Logger
- * @copyright Copyright (c) 2019 Hong Zhang
- */
-
 declare(strict_types=1);
 
 namespace Solital\Core\Logger\Processor;
 
 use Phoole\Base\Queue\UniquePriorityQueue;
-use Phoole\Tests\ProcessorAwareTraitTest;
 
 /**
  * ProcessorAwareTrait
@@ -45,7 +36,7 @@ trait ProcessorAwareTrait
             foreach (static::getProcessors() as $processor) {
                 $processor($this);
             }
-            
+
             $this->isProcessed = true;
         }
         return $this;

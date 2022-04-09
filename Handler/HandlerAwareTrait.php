@@ -1,19 +1,13 @@
 <?php
 
-/**
- * Phoole (PHP7.2+)
- *
- * @category  Library
- * @package   Solital\Core\Logger
- * @copyright Copyright (c) 2019 Hong Zhang
- */
-
 declare(strict_types=1);
 
 namespace Solital\Core\Logger\Handler;
 
-use Solital\Core\Logger\Entry\LogLevelTrait;
+use Symfony\Component\Yaml\Yaml;
 use Phoole\Base\Queue\UniquePriorityQueue;
+use Solital\Core\Kernel\Application;
+use Solital\Core\Logger\Entry\LogLevelTrait;
 use Solital\Core\Logger\Entry\LogEntryInterface;
 use Solital\Core\Logger\Processor\VerifyCallableTrait;
 

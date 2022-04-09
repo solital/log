@@ -33,10 +33,10 @@ class DefaultFormatter implements FormatterInterface
         // channel name
         $context = $entry->getContext();
         if (isset($context['__channel'])) {
-            $mesg .= '[' . strtoupper($context['__channel']) . '] ';
+            $mesg .= '[' . strtolower($context['__channel']). '] ';
         }
 
-        return $mesg . \strtoupper($entry->getLevel()) . ': ' . $entry . $this->getEol();
+        return date('Y-m-d H:i:s'). ' ' . $mesg . '[' . $entry->getLevel() . ']' .  ': ' . $entry . $this->getEol();
     }
 
     /**

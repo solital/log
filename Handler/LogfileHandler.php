@@ -1,17 +1,10 @@
 <?php
 
-/**
- * Phoole (PHP7.2+)
- *
- * @category  Library
- * @package   Solital\Core\Logger
- * @copyright Copyright (c) 2019 Hong Zhang
- */
-
 declare(strict_types=1);
 
 namespace Solital\Core\Logger\Handler;
 
+use Solital\Core\Kernel\Application;
 use Solital\Core\Logger\Formatter\FormatterInterface;
 
 /**
@@ -32,16 +25,19 @@ class LogfileHandler extends StreamHandler
     /**
      * Constructor
      *
-     * @param  string             $path    full path
+     * @param  string             $log_file
      * @param  null|FormatterInterface $formatter
      * @param  null|int                $rotate  rotate type
      * @throws \LogicException if path not writable
      */
     public function __construct(
-        string $path,
+        string $log_file,
         ?FormatterInterface $formatter = NULL,
         int $rotate = self::ROTATE_NONE
     ) {
+        $file = date('Y-m-d-His') . "-" . $log_file . ".txt";
+        $path = Application::getRootApp("Storage/log/", Application::DEBUG) . $file;
+
         $this->checkPath($path);
 
         if (file_exists($path)) {

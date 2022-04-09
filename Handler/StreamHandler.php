@@ -1,18 +1,13 @@
 <?php
 
-/**
- * Phoole (PHP7.2+)
- *
- * @category  Library
- * @package   Solital\Core\Logger
- * @copyright Copyright (c) 2019 Hong Zhang
- */
-
 declare(strict_types=1);
 
 namespace Solital\Core\Logger\Handler;
 
+use Symfony\Component\Yaml\Yaml;
+use Solital\Core\Kernel\Application;
 use Solital\Core\Logger\Entry\LogEntryInterface;
+use Solital\Core\Logger\Handler\HandlerAbstract;
 use Solital\Core\Logger\Formatter\FormatterInterface;
 
 /**
@@ -21,9 +16,9 @@ use Solital\Core\Logger\Formatter\FormatterInterface;
 class StreamHandler extends HandlerAbstract
 {
     /**
-     * @var resource
+     * @var mixed
      */
-    protected mixed $stream;
+    protected mixed $stream = null;
 
     /**
      * @param  string|resource    $stream
@@ -31,7 +26,12 @@ class StreamHandler extends HandlerAbstract
      */
     public function __construct(mixed $stream, ?FormatterInterface $formatter = null)
     {
-        $this->stream = $this->openStream($stream);
+        $config = Yaml::parseFile(Application::getDirConfigFiles(5) . 'bootstrap.yaml');
+
+        if ($config['logs']['enabled_log_files'] == true) {
+            $this->stream = $this->openStream($stream);
+        }
+
         parent::__construct($formatter);
     }
 
@@ -46,7 +46,7 @@ class StreamHandler extends HandlerAbstract
     protected function openStream(mixed $path): mixed
     {
         if (is_string($path)) {
-            if (false === strpos($path, '://')) {
+            if (str_contains('://', $path)) {
                 $path = 'file://' . $path;
             }
 
